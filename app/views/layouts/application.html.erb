@@ -36,6 +36,9 @@
 </nav>
 <div class="container">
   <div class="row">
+    <% flash.each do |a, b| %>
+      <div class="alert alert-success"><%= Array(b).join(", ") %></div>
+    <% end %>
     <div class="col-lg-12 text-center">
       <%= yield %>
     </div>
