@@ -1,4 +1,7 @@
 class Post < ApplicationRecord
+  validates :image, presence: true
+  validates :description, presence: true, length: { minimum: 10 }
+
   has_one_attached :image do |attachable|
     attachable.variant :large, resize_to_limit: [600, 600]
     attachable.variant :medium, resize_to_limit: [300, 300]
