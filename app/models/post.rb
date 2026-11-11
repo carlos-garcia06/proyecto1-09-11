@@ -1,4 +1,5 @@
 class Post < ApplicationRecord
+  belongs_to :user
   validates :image, presence: true
   validates :description, presence: true, length: { minimum: 10 }
 

@@ -1,11 +1,13 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_post, only: [:show, :destroy]
+  before_action :owner_only, only: [:destroy]
+
   def index
     @posts = Post.all
   end
 
   def show
-    @post = Post.find(params[:id])
   end
 
   def new
@@ -13,7 +15,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(permit_post)
+    @post = current_user.posts.build(permit_post)
     if @post.save
       flash[:success] = "Success!"
       redirect_to post_path(@post)
@@ -24,7 +26,6 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @post = Post.find(params[:id])
     if @post.destroy
       flash[:success] = "The post is destroy!"
     end
@@ -32,6 +33,17 @@ class PostsController < ApplicationController
   end
 
   private
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  def owner_only
+    unless @post.user == current_user
+      flash[:error] = "Solo el dueño del post puede hacer eso"
+      redirect_to posts_path, status: :see_other
+    end
+  end
+
   def permit_post
     params.require(:post).permit(:image, :description)
   end

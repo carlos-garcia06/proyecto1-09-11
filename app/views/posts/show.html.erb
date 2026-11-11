@@ -1,7 +1,11 @@
-<%= image_tag @post.image.variant(:large) if @post.image.attached? %>
-<br>
-<%= @post.description %>
-<div class="link">
-  <%= link_to "Destroy", @post, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-  <%= link_to "Edit", edit_post_path(@post) %>
+<div class="post">
+  <%= image_tag @post.image.variant(:large) if @post.image.attached? %>
+  <br>
+  <%= @post.description %>
+  <div class="link">
+    <% if @post.user == current_user %>
+      <%= link_to "Destroy", @post, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+      <%= link_to "Edit", edit_post_path(@post) %>
+    <% end %>
+  </div>
 </div>
