@@ -22,6 +22,14 @@ class PostsController < ApplicationController
     end
   end
 
+  def destroy
+    @post = Post.find(params[:id])
+    if @post.destroy
+      flash[:success] = "The post is destroy!"
+    end
+    redirect_to posts_path, status: :see_other
+  end
+
   private
   def permit_post
     params.require(:post).permit(:image, :description)
