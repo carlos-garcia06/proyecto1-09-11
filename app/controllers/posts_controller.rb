@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: [:show, :destroy]
-  before_action :owner_only, only: [:destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :owner_only, only: [:edit, :update, :destroy]
 
   def index
     @posts = Post.all
@@ -22,6 +22,19 @@ class PostsController < ApplicationController
     else
       flash[:error] = @post.errors.full_messages
       redirect_to new_post_path
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @post.update(permit_post)
+      flash[:success] = "Post actualizado!"
+      redirect_to post_path(@post)
+    else
+      flash[:error] = @post.errors.full_messages
+      redirect_to edit_post_path(@post)
     end
   end
 
